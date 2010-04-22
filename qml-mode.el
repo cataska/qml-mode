@@ -1,8 +1,9 @@
 (defconst qml-font-lock-keywords-1
   (list
-   '("\\<\\(import\\|property\\|function\\|Item\\|Rectangle\\|Image\\|Text\\|Text\\(Edit\\|Input\\)\\|MouseArea\\|ListView\\|GridView\\|ListModel\\|ListElement\\|Component\\|PropertyChanges\\|NumberAnimation\\|Transition\\|SequentialAnimation\\|ParallelAnimation\\|PauseAnimation\\|Timer\\)\\>" . font-lock-keyword-face)
-   '("\\<Qt\\>" . font-lock-constant-face)
-   '("\\<\\(int\\|bool\\|double\\|real\\|string\\|url\\|color\\|date\\|var\\|id\\|width\\|height\\|x\\|y\\|cellWidth\\|cellHeight\\|radius\\|source\\|opacity\\|duration\\|properties\\|property\\|interval\\|repeat\\|running\\|model\\|delegate\\)\\>" . font-lock-type-face)
+   '("\\<\\(Qt\\|import\\|property\\|function\\|Item\\|Rectangle\\|Image\\|Text\\|Text\\(Edit\\|Input\\)\\|MouseArea\\|ListView\\|GridView\\|ListModel\\|ListElement\\|Component\\|PropertyChanges\\|NumberAnimation\\|Transition\\|SequentialAnimation\\|ParallelAnimation\\|PauseAnimation\\|Timer\\)\\>" . font-lock-keyword-face)
+   '("property[ \t]+\\([a-zA-Z_]+[a-zA-Z0-9_]*\\)" 1 font-lock-type-face)
+   '("function[ \t]+\\([a-zA-Z_]+[a-zA-Z0-9_]*\\)" 1 font-lock-function-name-face)
+   '("\\([a-zA-Z_\\.]+[a-zA-Z0-9_]*\\):" 1 font-lock-type-face)
    )
   )
 
