@@ -1,13 +1,53 @@
-(defconst qml-font-lock-keywords-1
-  (list
-   '("\\<\\(Qt\\|import\\|property\\|function\\|Item\\|Rectangle\\|Image\\|Text\\|Text\\(Edit\\|Input\\)\\|MouseArea\\|ListView\\|GridView\\|ListModel\\|ListElement\\|Component\\|PropertyChanges\\|NumberAnimation\\|Transition\\|SequentialAnimation\\|ParallelAnimation\\|PauseAnimation\\|Timer\\)\\>" . font-lock-keyword-face)
-   '("property[ \t]+\\([a-zA-Z_]+[a-zA-Z0-9_]*\\)" 1 font-lock-type-face)
-   '("function[ \t]+\\([a-zA-Z_]+[a-zA-Z0-9_]*\\)" 1 font-lock-function-name-face)
-   '("\\([a-zA-Z_\\.]+[a-zA-Z0-9_]*\\):" 1 font-lock-type-face)
-   )
-  )
+(defconst qml-font-lock-keywords
+  (let ((kw1 (mapconcat 'identity
+                        '("Qt" "import" "property"
+                          "State" "PropertyChanges" "StateGroup" "ParentChange"
+                          "StateChangeScript" "AnchorChanges" "PropertyAnimation" "NumberAnimation"
+                          "ColorAnimation" "RotationAnimation" "SequentialAnimation" "ParallelAnimation"
+                          "PauseAnimation" "ParentAnimation" "AnchorAnimation" "SmoothedAnimation"
+                          "PropertyAction" "ScriptAction" "Transition" "SpringFollow"
+                          "Behavior" "Binding" "ListModel" "ListElement"
+                          "VisualItemModel" "VisualDataModel" "Package" "XmlListModel"
+                          "XmlRole" "Connections" "Component" "Timer"
+                          "QtObject" "WorkerScript" "Item" "Rectangle"
+                          "Image" "BorderImage" "Text" "TextInput"
+                          "TextEdit" "MouseArea" "FocusScope" "Flickable"
+                          "Flipable" "GestureArea" "Loader" "Repeater"
+                          "SystemPalette" "LayoutItem" "Scale" "Rotation"
+                          "Translate" "ViewsPositionersMediaEffects" "ListView" "GridView"
+                          "PathView" "Path" "PathLine" "PathQuad"
+                          "PathCubic" "PathAttribute" "PathPercent" "WebView"
+                          "Column" "Row" "Grid" "Flow"
+                          "SoundEffect" "Audio" "Video" "Particles"
+                          "ParticleMotionLinear" "ParticleMotionGravity" "ParticleMotionWander")
+                        "\\|"))
+        (js-keywords (mapconcat 'identity
+                                '("case" "catch" "const" "continue"
+                                  "debugger" "default" "delete" "do"
+                                  "else" "enum"
+                                  "false" "finally" "for" "function"
+                                  "if" "in" "instanceof" "import"
+                                  "let"
+                                  "new" "null"
+                                  "return"
+                                  "switch"
+                                  "this" "throw" "true" "false" """try" "typeof"
+                                  "var" "void"
+                                  "while" "with"
+                                  "yield")
+                                "\\|"))
+        )
+    (list
+     (cons (concat "\\<\\(" kw1 "\\)\\>") font-lock-keyword-face)
+     (cons (concat "\\<\\(" js-keywords "\\)\\>") font-lock-keyword-face)
+     '("property[ \t]+\\([a-zA-Z_]+[a-zA-Z0-9_]*\\)" 1 font-lock-type-face)
+     '("function[ \t]+\\([a-zA-Z_]+[a-zA-Z0-9_]*\\)" 1 font-lock-function-name-face)
+     '("\\([a-zA-Z_\\.]+[a-zA-Z0-9_]*\\):" 1 font-lock-type-face)
+     )
+    ))
 
-(defvar qml-font-lock-keywords qml-font-lock-keywords-1)
+
+(defvar qml-font-lock-keywords qml-font-lock-keywords)
 
 (defun qml-mode()
   "Major mode for Qt declarative UI"
