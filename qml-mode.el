@@ -47,12 +47,22 @@
     ))
 
 
+(defvar qml-mode-syntax-table
+  (let ((qml-mode-syntax-table (make-syntax-table)))
+    ; Comment styles are same as C++
+    (modify-syntax-entry ?/ ". 124b" qml-mode-syntax-table)
+    (modify-syntax-entry ?* ". 23" qml-mode-syntax-table)
+    (modify-syntax-entry ?\n "> b" qml-mode-syntax-table)
+    qml-mode-syntax-table)
+  "Syntax table for qml-mode")
+
 (defvar qml-font-lock-keywords qml-font-lock-keywords)
 
 (defun qml-mode()
   "Major mode for Qt declarative UI"
   (interactive)
   (kill-all-local-variables)
+  (set-syntax-table qml-mode-syntax-table)
   (set (make-local-variable 'font-lock-defaults) '(qml-font-lock-keywords))
   (setq major-mode 'qml-mode)
   (setq mode-name "qml")
