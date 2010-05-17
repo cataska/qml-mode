@@ -1,3 +1,5 @@
+(defvar qml-mode-hook nil)
+
 (defconst qml-font-lock-keywords
   (let ((kw1 (mapconcat 'identity
                         '("Qt" "import" "property"
@@ -22,7 +24,8 @@
                           "ParticleMotionLinear" "ParticleMotionGravity" "ParticleMotionWander")
                         "\\|"))
         (js-keywords (mapconcat 'identity
-                                '("case" "catch" "const" "continue"
+                                '("break"
+                                  "case" "catch" "const" "continue"
                                   "debugger" "default" "delete" "do"
                                   "else" "enum"
                                   "false" "finally" "for" "function"
@@ -31,10 +34,11 @@
                                   "new" "null"
                                   "return"
                                   "switch"
-                                  "this" "throw" "true" "false" """try" "typeof"
+                                  "this" "throw" "true" "false" "try" "typeof"
                                   "var" "void"
                                   "while" "with"
-                                  "yield")
+                                  "yield"
+                                  "undefined")
                                 "\\|"))
         )
     (list
@@ -69,5 +73,7 @@
   (set (make-local-variable 'indent-line-function) 'insert-tab)
   (setq major-mode 'qml-mode)
   (setq mode-name "qml")
+  (run-hooks 'qml-mode-hook)
   )
+
 (provide 'qml-mode)
