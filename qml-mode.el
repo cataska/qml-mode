@@ -240,7 +240,7 @@
 
 (defvar qml-indent-width 4)
 
-(defconst qml-block-re "\\(^[ \t]*\\)\\([a-zA-Z0-9]*\\)[ \t]*[a-zA-Z0-9_]*[ \t]*[a-zA-Z0-9_=<>(),: \t]*[{\\[]")
+(defconst qml-block-re "\\(^[ \t]*\\)\\([\\.a-zA-Z0-9]*\\)[ \t]*[a-zA-Z0-9_]*[ \t]*[a-zA-Z0-9_=<>(),: \t]*[{\\[]")
 
 (defun qml-get-beg-of-block ()
   (save-excursion
@@ -325,9 +325,11 @@
     (indent-line-to cur-indent)
     (setq cur-line (line-number-at-pos))
     (save-excursion
-      (if (and (= cur-line (line-number-at-pos end))
-               (/= cur-line (line-number-at-pos (re-search-forward "]" nil t))))
-          (indent-line-to (- cur-indent tab-width))))))
+      (setq search-result (re-search-forward "]" nil t)))
+    (if (and (= cur-line (line-number-at-pos end))
+             (or (not search-result)
+                 (/= cur-line (line-number-at-pos search-result))))
+        (indent-line-to (- cur-indent tab-width)))))
     ;; (and start
     ;;      end
     ;;      (> cur start)
