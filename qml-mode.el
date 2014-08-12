@@ -11,19 +11,19 @@
 			(cyan "#b0b5d2")
 			(white "#f0f0f0"))
 
-	(defface qml-preprocessor-kwds-face 
+	(defface qml-preprocessor-kwds-face
 			`((t (:foreground ,yellow)))
 		"*Face for preprocesor directives."
 		)
   (defvar qml-preprocessor-kwds-face 'qml-preprocessor-kwds-face)
 
-	(defface qml-constant-kwds-face 
+	(defface qml-constant-kwds-face
 			`((t (:foreground ,cyan)))
 		"*"
 		)
 	(defvar qml-constant-kwds-face 'qml-constant-kwds-face)
 
-	(defface qml-global-funcs-face 
+	(defface qml-global-funcs-face
 			`((t (:foreground ,red)))
 		"*"
 		)
@@ -35,49 +35,49 @@
 		)
 	(defvar qml-global-classes 'qml-global-classes)
 
-	(defface qml-global-props-face 
+	(defface qml-global-props-face
 			`((t (:foreground ,blue)))
 		"*"
 		)
 	(defvar qml-global-props-face 'qml-global-props-face)
 
-	(defface qml-operators-face 
+	(defface qml-operators-face
 			`((t (:foreground ,yellow)))
 		"*"
 		)
-	(defvar qml-operators-face 'qml-operators-face) 
+	(defvar qml-operators-face 'qml-operators-face)
 
-	(defface qml-specifier-kwds-face 
+	(defface qml-specifier-kwds-face
 			`((t (:foreground ,magenta)))
 		"*"
 		)
 	(defvar qml-specifier-kwds-face 'qml-specifier-kwds-face)
 
-	(defface qml-package-kwds-face 
+	(defface qml-package-kwds-face
 			`((t (:foreground ,yellow)))
 		"*"
 		)
 	(defvar qml-package-kwds-face 'qml-package-kwds-face)
 
-	(defface qml-class-kwds-face 
+	(defface qml-class-kwds-face
 			`((t (:foreground ,yellow)))
 		"*"
 		)
 	(defvar qml-class-kwds-face 'qml-class-kwds-face)
 
-	(defface qml-other-decl-kwds-face 
+	(defface qml-other-decl-kwds-face
 			`((t (:foreground ,yellow)))
 		"*"
 		)
 	(defvar qml-other-decl-kwds-face 'qml-other-decl-kwds-face)
 
-	(defface qml-other-decl-2-kwds-face 
+	(defface qml-other-decl-2-kwds-face
 			`((t (:foreground ,blue)))
 		"* function, var"
 		)
 	(defvar qml-other-decl-2-kwds-face 'qml-other-decl-2-kwds-face)
 
-	(defface qml-decl-level-kwds-face 
+	(defface qml-decl-level-kwds-face
 			`((t (:foreground ,yellow)))
 		"*"
 		)
@@ -240,7 +240,7 @@
 
 (defvar qml-indent-width 4)
 
-(defconst qml-block-re "\\(^[ \t]*\\)\\([a-zA-Z0-9]*\\)[ \t]*[a-zA-Z0-9_]*[ \t]*[a-zA-Z0-9_(),: \t]*{")
+(defconst qml-block-re "\\(^[ \t]*\\)\\([\\.a-zA-Z0-9]*\\)[ \t]*[a-zA-Z0-9_]*[ \t]*[a-zA-Z0-9_=<>(),: \t]*[{\\[]")
 
 (defun qml-get-beg-of-block ()
   (save-excursion
@@ -319,12 +319,17 @@
           (goto-char start)
           (setq cur-indent (current-indentation))
           (goto-char cur)
-          (setq cur-indent (+ cur-indent default-tab-width))))
-    
+          (setq cur-indent (+ cur-indent tab-width))))
     ;;(message (format "start: %d, end: %d, cur: %d, cur-indent: %d" start end cur cur-indent))
     )
     (indent-line-to cur-indent)
-    ))
+    (setq cur-line (line-number-at-pos))
+    (save-excursion
+      (setq search-result (re-search-forward "]" nil t)))
+    (if (and (= cur-line (line-number-at-pos end))
+             (or (not search-result)
+                 (/= cur-line (line-number-at-pos search-result))))
+        (indent-line-to (- cur-indent tab-width)))))
     ;; (and start
     ;;      end
     ;;      (> cur start)
@@ -333,8 +338,16 @@
   ;; )
 
 (defun qml-indent-region (start end)
-  (let ((indent-region-function nil))
-    (indent-region start end nil)))
+  (save-excursion
+    (goto-char end)
+    (setq end-line-number (line-number-at-pos))
+    (goto-char start)
+    (setq cur-line-number (line-number-at-pos))
+    (while (< cur-line-number end-line-number)
+      (progn
+        (qml-indent-line)
+        (forward-line 1)
+        (setq cur-line-number (line-number-at-pos))))))
 
 (defun qml-mode()
   "Major mode for Qt declarative UI"
